@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Wired</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#101010] text-white">
+    <div class="flex flex-row gap-2">
+        <!--navbar.html-->
+
+        <div class="ml-4 mt-4 flex flex-col">
+            <p class="text-2xl font-bold mb-4">
+                Routes Management
+                <span class="text-lg font-semibold text-black bg-green-300 rounded-lg px-1 cursor-pointer ml-2" id="create-route">Create</span>
+            </p>
+
+            <div id="routes" class="flex flex-col gap-2"></div>
+        </div>
+    </div>
+
+    <script>
+        (async () => {
+            const routesResponse = await fetch("https://master.wired.rip/api/routes").then(async (res) => await res.json());
+            const routesDiv = document.getElementById("routes");
+
+            for (const route of routesResponse.routes) {
+                const routeDiv = document.createElement("div");
+                routeDiv.id = `wired-route-${route.proxy_domain}`;
+                routeDiv.className = "flex flex-row gap-2 bg-[#202020] p-2 rounded-lg";
+
+                const routeName = document.createElement("p");
+                routeName.className = "text-lg font-bold";
+                routeName.innerText = route.proxy_domain;
+
+                const routeArrow = document.createElement("p");
+                routeArrow.className = "text-lg select-none";
+                routeArrow.innerText = "»";
+
+                const routeServer = document.createElement("p");
+                routeServer.className = "text-lg font-semibold text-neutral-300";
+                routeServer.innerText = `${route.server_host}:${route.server_port}`;
+                const trashbinSvg = `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                </svg>
+                `;
+
+                const trashbin = document.createElement("div");
+                trashbin.className = "cursor-pointer";
+                trashbin.innerHTML = trashbinSvg;
+
+                trashbin.addEventListener("mouseover", () => {
+                    trashbin.style.color = "red";
+                });
+
+                trashbin.addEventListener("mouseout", () => {
+                    trashbin.style.color = "white";
+                });
+
+                trashbin.addEventListener("click", async () => {
+                    const deleteRouteResponse = await fetch(`https://master.wired.rip/api/routes/remove?route_id=${route.route_id}`, { method: "DELETE" });
+
+                    if (deleteRouteResponse.status === 200) {
+                        alert("Route deleted successfully!");
+                        location.reload();
+                    } else {
+                        alert("Failed to delete route!");
+                    }
+                });
+
+                routeDiv.appendChild(routeName);
+                routeDiv.appendChild(routeArrow);
+                routeDiv.appendChild(routeServer);
+                routeDiv.appendChild(trashbin);
+
+                routesDiv.appendChild(routeDiv);
+            }
+
+            const createRouteButton = document.getElementById("create-route");
+            createRouteButton.addEventListener("click", async () => {
+                const serverHost = prompt("Server Host");
+                const serverPort = prompt("Server Port");
+                const proxyPort = 25565;
+                const proxyDomain = prompt("Proxy Domain");
+
+                const createRouteResponse = await fetch(`https://master.wired.rip/api/routes/add?server_host=${serverHost}&server_port=${serverPort}&proxy_port=${proxyPort}&proxy_domain=${proxyDomain}`);
+
+                if (createRouteResponse.status === 200) {
+                    alert("Route created successfully!");
+                    location.reload();
+                } else {
+                    alert("Failed to create route!");
+                }
+            });
+        })();
+    </script>
+</body>
+</body>
+
+</html>
