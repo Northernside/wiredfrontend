@@ -7,25 +7,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!--utils.html-->
+    <!--cookie-checker.html-->
 </head>
 
 <body class="bg-[#101010] text-white">
     <div class="flex flex-row gap-2">
         <!--navbar.html-->
+        <!--load-user-data.html-->
 
         <div class="ml-4 mt-4 flex flex-col">
             <p class="text-2xl font-bold mb-4">
                 Routes Management
-                <span class="text-lg font-semibold text-black bg-green-300 rounded-lg px-1 cursor-pointer ml-2" id="create-route">Create</span>
+                <span class="text-lg font-semibold text-black bg-green-300 rounded-lg px-1 cursor-pointer ml-2"
+                    id="create-route">Create</span>
             </p>
 
-            <div id="routes" class="flex flex-col gap-2"></div>
+            <div id="routes" class="flex flex-col gap-2">
+                <p class="text-lg font-semibold" id="routes-loading">Loading...</p>
+            </div>
         </div>
     </div>
 
     <script>
         (async () => {
-            const routesResponse = await fetch("https://master.wired.rip/api/routes").then(async (res) => await res.json());
+            const routesResponse = await authFetch("https://master.wired.rip/api/routes", {}).then(async (res) => await res.json());
             const routesDiv = document.getElementById("routes");
 
             for (const route of routesResponse.routes) {
@@ -63,7 +70,7 @@
                 });
 
                 trashbin.addEventListener("click", async () => {
-                    const deleteRouteResponse = await fetch(`https://master.wired.rip/api/routes/remove?route_id=${route.route_id}`, { method: "DELETE" });
+                    const deleteRouteResponse = await authFetch(`https://master.wired.rip/api/routes/remove?route_id=${route.route_id}`, { method: "DELETE" });
 
                     if (deleteRouteResponse.status === 200) {
                         alert("Route deleted successfully!");
@@ -81,6 +88,9 @@
                 routesDiv.appendChild(routeDiv);
             }
 
+            const routesLoading = document.getElementById("routes-loading");
+            routesLoading.remove();
+
             const createRouteButton = document.getElementById("create-route");
             createRouteButton.addEventListener("click", async () => {
                 const serverHost = prompt("Server Host");
@@ -88,7 +98,7 @@
                 const proxyPort = 25565;
                 const proxyDomain = prompt("Proxy Domain");
 
-                const createRouteResponse = await fetch(`https://master.wired.rip/api/routes/add?server_host=${serverHost}&server_port=${serverPort}&proxy_port=${proxyPort}&proxy_domain=${proxyDomain}`);
+                const createRouteResponse = await authFetch(`https://master.wired.rip/api/routes/add?server_host=${serverHost}&server_port=${serverPort}&proxy_port=${proxyPort}&proxy_domain=${proxyDomain}`, {});
 
                 if (createRouteResponse.status === 200) {
                     alert("Route created successfully!");
@@ -99,7 +109,6 @@
             });
         })();
     </script>
-</body>
 </body>
 
 </html>

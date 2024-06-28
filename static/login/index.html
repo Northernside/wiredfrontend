@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Wired</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#101010]">
+    <div class="w-full h-screen flex flex-col justify-center items-center">
+        <p class="font-bold text-4xl text-white">wired.rip</p>
+        <p class="font-medium text-md text-neutral-400 mt-1">authenticate with discord</p>
+
+        <div class="w-[250px] h-[45px] rounded-lg bg-[#5865F2] flex justify-center items-center mt-5 gap-2 cursor-pointer" id="login">
+            <svg width="32" height="32" viewBox="0 0 41 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M33.8998 2.52002C31.2998 1.34002 28.5198 0.48 25.6398 0C25.2798 0.62 24.8798 1.46 24.5998 2.12C21.5198 1.68 18.4798 1.68 15.4398 2.12C15.1598 1.46 14.7398 0.62 14.3998 0C11.4998 0.48 8.71978 1.34002 6.13978 2.52002C0.89978 10.16 -0.52022 17.62 0.19978 24.98C3.67978 27.48 7.0398 29 10.3398 30C11.1398 28.92 11.8798 27.76 12.4998 26.54C11.2998 26.1 10.1598 25.56 9.07978 24.92C9.35978 24.72 9.63978 24.5 9.89978 24.28C16.4798 27.26 23.6398 27.26 30.1398 24.28C30.4198 24.5 30.6798 24.72 30.9598 24.92C29.8798 25.56 28.7398 26.1 27.5398 26.54C28.1598 27.76 28.8998 28.92 29.6998 30C32.9998 29 36.3798 27.48 39.8398 24.98C40.7198 16.46 38.4598 9.06002 33.9398 2.52002H33.8998ZM13.3597 20.34C11.3797 20.34 9.75978 18.54 9.75978 16.34C9.75978 14.14 11.3397 12.34 13.3597 12.34C15.3797 12.34 16.9998 14.14 16.9598 16.34C16.9598 18.54 15.3597 20.34 13.3597 20.34ZM26.6398 20.34C24.6598 20.34 23.0398 18.54 23.0398 16.34C23.0398 14.14 24.6198 12.34 26.6398 12.34C28.6598 12.34 30.2798 14.14 30.2398 16.34C30.2398 18.54 28.6598 20.34 26.6398 20.34Z"
+                    fill="white" />
+            </svg>
+
+            <p class="font-medium text-white text-center">Login with Discord</p>
+        </div>
+    </div>
+
+    <script>
+        function getCookie(key) {
+            const cookies = document.cookie.split("; ");
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].split("=");
+                if (cookie[0] === key) return cookie[1];
+            }
+
+            return null;
+        }
+
+        const token = getCookie("token");
+        if (token) window.location.href = "/";
+
+        document.getElementById("login").addEventListener("click", () => {
+            window.location.href = "https://master.wired.rip/api/auth/discord";
+        });
+    </script>
+</body>
+
+</html>

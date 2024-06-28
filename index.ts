@@ -1,4 +1,4 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -9,6 +9,16 @@ const componentsFolder = Bun.env.COMPONENTS_FOLDER ?? "components";
 
 let fileCache: Record<string, string> = {};
 loadComponents();
+
+router.get("/auth", async ({ query, set }) => {
+  const queryToken = query.token;
+  set.headers["Set-Cookie"] = `token=${queryToken}; Path=/;`;
+  set.redirect = "/";
+}, {
+  query: t.Object({
+    token: t.String(),
+  }),
+});
 
 router.get("*", async ({ request }) => {
   let url = new URL(request.url).pathname;

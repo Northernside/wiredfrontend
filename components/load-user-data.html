@@ -1,0 +1,19 @@
+<script>
+    token = getCookie("token");
+
+    if (token) {
+        const user = parseJwt(token);
+
+        console.log(user);
+
+        const discordPfp = document.getElementById("discord-profile-image");
+        const discordUsername = document.getElementById("discord-username");
+        const discordRole = document.getElementById("discord-role");
+
+        if (discordPfp) discordPfp.src = `https://cdn.discordapp.com/avatars/${user.discord_id}/${user.avatar}.webp?size=256`;
+        if (discordUsername) discordUsername.innerText = user.username;
+        if (discordRole) discordRole.innerText = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+    } else {
+        window.location.href = "/login";
+    }
+</script>
