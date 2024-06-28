@@ -10,10 +10,6 @@ const componentsFolder = Bun.env.COMPONENTS_FOLDER ?? "components";
 let fileCache: Record<string, string> = {};
 loadComponents();
 
-fs.watch(staticFolder, { recursive: true }, () => {
-  fileCache = {};
-});
-
 router.get("*", async ({ request }) => {
   let url = new URL(request.url).pathname;
   if (!/\.\w+$/.test(url)) url = path.join(url, "index.html");
