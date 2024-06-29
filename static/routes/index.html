@@ -13,17 +13,24 @@
 
 <body class="bg-[#101010] text-white">
     <!--cookie-checker.html-->
-    <div class="flex flex-row gap-2">
+    <div class="flex flex-row gap-2 min-h-screen w-full relative">
         <!--navbar.html-->
         <!--load-user-data.html-->
 
-        <div class="ml-4 mt-4 flex flex-col">
-            <p class="text-2xl font-bold mb-4">
-                Routes Management
-            </p>
+        <div class="overflow-y-scroll h-screen w-full">
+            <div class="mx-4 mt-4 flex flex-col min-h-screen w-full max-w-full relative">
+                <div class="text-2xl font-bold mb-4 justify-between flex flex-row">
+                    <p>Routes Management</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:hidden cursor-pointer mr-8" fill="none"
+                        id="open-navbar" viewBox="0 0 24 24" stroke="currentColor" id="open-navbar">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </div>
 
-            <div id="routes" class="flex flex-row gap-2 flex-wrap">
-                <p class="text-lg font-semibold" id="routes-loading">Loading...</p>
+                <div id="routes" class="flex lg:flex-row flex-col gap-2 flex-wrap mr-8">
+                    <p class="text-lg font-semibold" id="routes-loading">Loading...</p>
+                </div>
             </div>
         </div>
 
@@ -76,7 +83,7 @@
                 }
 
                 const createNewRouteDiv = document.createElement("div");
-                createNewRouteDiv.classList.add("border-2", "border-[#2C2C2C]", "border-dashed", "rounded-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[130px]", "flex", "flex-row", "items-center", "justify-center", "cursor-pointer");
+                createNewRouteDiv.classList.add("border-2", "border-[#2C2C2C]", "border-dashed", "rounded-lg", "p-2", "flex", "flex-row", "gap-2", "w-full", "lg:w-[350px]", "h-[130px]", "flex", "flex-row", "items-center", "justify-center", "cursor-pointer");
                 createNewRouteDiv.id = "create-route";
                 createNewRouteDiv.innerHTML = "<p>Create new route</p>";
                 routesDiv.appendChild(createNewRouteDiv);
@@ -140,7 +147,7 @@
                     routeDiv.id = `route-${route.route_id}`;
 
                     const routeHeader = document.createElement("div");
-                    routeHeader.classList.add("bg-[#151515]", "border", "border-[#2C2C2C]", "rounded-t-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[50px]", "flex", "flex-row", "items-center", "justify-between");
+                    routeHeader.classList.add("bg-[#151515]", "border", "border-[#2C2C2C]", "rounded-t-lg", "p-2", "flex", "flex-row", "gap-2", "w-full", "lg:w-[350px]", "h-[50px]", "flex", "flex-row", "items-center", "justify-between");
 
                     const routeName = document.createElement("p");
                     routeName.classList.add("text-md", "font-semibold");
@@ -160,7 +167,7 @@
                     routeDiv.appendChild(routeHeader);
 
                     const routeBody = document.createElement("div");
-                    routeBody.classList.add("bg-[#151515]", "border", "border-t-0", "border-[#2C2C2C]", "rounded-b-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[80px]", "flex", "flex-row", "items-center");
+                    routeBody.classList.add("bg-[#151515]", "border", "border-t-0", "border-[#2C2C2C]", "rounded-b-lg", "p-2", "flex", "flex-row", "gap-2", "w-full", "lg:w-[350px]", "h-[80px]", "flex", "flex-row", "items-center");
 
                     const routeBodyLeft = document.createElement("div");
                     routeBodyLeft.classList.add("flex", "flex-row", "gap-2", "w-full");

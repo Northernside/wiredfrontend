@@ -17,13 +17,20 @@
         <!--navbar.html-->
         <!--load-user-data.html-->
 
-        <div class="ml-4 mt-4 flex flex-col">
-            <p class="text-2xl font-bold mb-4">
-                User Management
-            </p>
+        <div class="overflow-y-scroll h-screen w-full">
+            <div class="mx-4 mt-4 flex flex-col min-h-screen w-full max-w-full relative">
+                <div class="text-2xl font-bold mb-4 justify-between flex flex-row">
+                    <p>User Management</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:hidden cursor-pointer mr-8" fill="none"
+                        id="open-navbar" viewBox="0 0 24 24" stroke="currentColor" id="open-navbar">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </div>
 
-            <div id="users" class="flex flex-row gap-2 flex-wrap">
-                <p class="text-lg font-semibold" id="users-loading">Loading...</p>
+                <div id="users" class="flex lg:flex-row flex-col gap-2 flex-wrap mr-8">
+                    <p class="text-lg font-semibold" id="users-loading">Loading...</p>
+                </div>
             </div>
         </div>
 
@@ -51,7 +58,7 @@
                     userDiv.id = `user-${user.user_id}`;
 
                     const userHeader = document.createElement("div");
-                    userHeader.classList.add("bg-[#151515]", "border", "border-[#2C2C2C]", "rounded-t-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[50px]", "flex", "flex-row", "items-center", "justify-between");
+                    userHeader.classList.add("bg-[#151515]", "border", "border-[#2C2C2C]", "rounded-t-lg", "p-2", "flex", "flex-row", "gap-2", "w-full", "lg:w-[350px]", "h-[50px]", "flex", "flex-row", "items-center", "justify-between");
 
                     const userName = document.createElement("p");
                     userName.classList.add("text-md", "font-semibold", "flex", "flex-row", "items-center");
@@ -61,7 +68,7 @@
                     userDiv.appendChild(userHeader);
 
                     const userBody = document.createElement("div");
-                    userBody.classList.add("bg-[#151515]", "border", "border-t-0", "border-[#2C2C2C]", "rounded-b-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[60px]", "flex", "flex-row", "items-center");
+                    userBody.classList.add("bg-[#151515]", "border", "border-t-0", "border-[#2C2C2C]", "rounded-b-lg", "p-2", "flex", "flex-row", "gap-2", "w-full", "lg:w-[350px]", "h-[60px]", "flex", "flex-row", "items-center");
 
                     const userBodyLeft = document.createElement("div");
                     userBodyLeft.classList.add("flex", "flex-row", "gap-2", "w-full");
