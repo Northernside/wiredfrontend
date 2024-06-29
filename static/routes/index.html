@@ -20,11 +20,9 @@
         <div class="ml-4 mt-4 flex flex-col">
             <p class="text-2xl font-bold mb-4">
                 Routes Management
-                <span class="text-lg font-semibold text-black bg-green-300 rounded-lg px-1 cursor-pointer ml-2"
-                    id="create-route">Create</span>
             </p>
 
-            <div id="routes" class="flex flex-col gap-2">
+            <div id="routes" class="flex flex-row gap-2 flex-wrap">
                 <p class="text-lg font-semibold" id="routes-loading">Loading...</p>
             </div>
         </div>
@@ -37,37 +35,68 @@
 
             for (const route of routesResponse.routes) {
                 const routeDiv = document.createElement("div");
-                routeDiv.id = `wired-route-${route.proxy_domain}`;
-                routeDiv.className = "flex flex-row gap-2 bg-[#202020] p-2 rounded-lg";
+                routeDiv.classList.add("flex", "flex-col");
+
+                const routeHeader = document.createElement("div");
+                routeHeader.classList.add("bg-[#151515]", "border", "border-[#2C2C2C]", "rounded-t-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[50px]", "flex", "flex-row", "items-center", "justify-between");
 
                 const routeName = document.createElement("p");
-                routeName.className = "text-lg font-bold";
+                routeName.classList.add("text-md", "font-semibold");
                 routeName.innerText = route.proxy_domain;
+                routeHeader.appendChild(routeName);
 
-                const routeArrow = document.createElement("p");
-                routeArrow.className = "text-lg select-none";
-                routeArrow.innerText = "»";
+                const trashbin = document.createElement("button");
+                trashbin.classList.add("hover:bg-[#202020]", "rounded-lg", "p-2", "group", "transition-all", "duration-300");
 
-                const routeServer = document.createElement("p");
-                routeServer.className = "text-lg font-semibold text-neutral-300";
-                routeServer.innerText = `${route.server_host}:${route.server_port}`;
                 const trashbinSvg = `
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                </svg>
+                <svg class="h-6 w-6 group-hover:fill-red-500 fill-neutral-500 transition-all duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path></svg>
                 `;
 
-                const trashbin = document.createElement("div");
-                trashbin.className = "cursor-pointer";
                 trashbin.innerHTML = trashbinSvg;
+                routeHeader.appendChild(trashbin);
 
-                trashbin.addEventListener("mouseover", () => {
-                    trashbin.style.color = "red";
-                });
+                routeDiv.appendChild(routeHeader);
 
-                trashbin.addEventListener("mouseout", () => {
-                    trashbin.style.color = "white";
-                });
+                const routeBody = document.createElement("div");
+                routeBody.classList.add("bg-[#151515]", "border", "border-t-0", "border-[#2C2C2C]", "rounded-b-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[80px]", "flex", "flex-row", "items-center");
+
+                const routeBodyLeft = document.createElement("div");
+                routeBodyLeft.classList.add("flex", "flex-row", "gap-2", "w-full");
+
+                const routeBodyLeftHost = document.createElement("div");
+                routeBodyLeftHost.classList.add("w-full");
+
+                const routeBodyLeftHostLabel = document.createElement("p");
+                routeBodyLeftHostLabel.classList.add("text-sm", "font-regular", "text-neutral-400");
+                routeBodyLeftHostLabel.innerText = "Host";
+                routeBodyLeftHost.appendChild(routeBodyLeftHostLabel);
+
+                const routeBodyLeftHostValue = document.createElement("p");
+                routeBodyLeftHostValue.classList.add("text-md", "font-medium", "bg-[#202020]", "border", "border-[#303030]", "rounded-lg", "px-2", "py-1", "w-full");
+                routeBodyLeftHostValue.innerText = route.server_host;
+                routeBodyLeftHost.appendChild(routeBodyLeftHostValue);
+
+                routeBodyLeft.appendChild(routeBodyLeftHost);
+
+                const routeBodyLeftPort = document.createElement("div");
+                routeBodyLeftPort.classList.add("w-max");
+
+                const routeBodyLeftPortLabel = document.createElement("p");
+                routeBodyLeftPortLabel.classList.add("text-sm", "font-regular", "text-neutral-400");
+                routeBodyLeftPortLabel.innerText = "Port";
+                routeBodyLeftPort.appendChild(routeBodyLeftPortLabel);
+
+                const routeBodyLeftPortValue = document.createElement("p");
+                routeBodyLeftPortValue.classList.add("text-md", "font-medium", "bg-[#202020]", "border", "border-[#303030]", "rounded-lg", "px-2", "py-1");
+                routeBodyLeftPortValue.innerText = route.server_port;
+                routeBodyLeftPort.appendChild(routeBodyLeftPortValue);
+
+                routeBodyLeft.appendChild(routeBodyLeftPort);
+                routeBody.appendChild(routeBodyLeft);
+
+                routeDiv.appendChild(routeBody);
+
+                routesDiv.appendChild(routeDiv);
 
                 trashbin.addEventListener("click", async () => {
                     const deleteRouteResponse = await authFetch(`https://master.wired.rip/api/routes/remove?route_id=${route.route_id}`, { method: "DELETE" });
@@ -79,14 +108,13 @@
                         alert("Failed to delete route!");
                     }
                 });
-
-                routeDiv.appendChild(routeName);
-                routeDiv.appendChild(routeArrow);
-                routeDiv.appendChild(routeServer);
-                routeDiv.appendChild(trashbin);
-
-                routesDiv.appendChild(routeDiv);
             }
+
+            const createNewRouteDiv = document.createElement("div");
+            createNewRouteDiv.classList.add("border-2", "border-[#2C2C2C]", "border-dashed", "rounded-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[130px]", "flex", "flex-row", "items-center", "justify-center", "cursor-pointer");
+            createNewRouteDiv.id = "create-route";
+            createNewRouteDiv.innerHTML = "<p>Create new route</p>";
+            routesDiv.appendChild(createNewRouteDiv);
 
             document.getElementById("routes-loading").remove();
 

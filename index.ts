@@ -93,3 +93,22 @@ router.listen({
   hostname: Bun.env.HOSTNAME ?? "127.0.0.1",
   port: Bun.env.PORT ?? 37422,
 });
+
+fs.watch(staticFolder, () => {
+  console.log("Static files changed, reloading...");
+  fileCache = {};
+});
+
+fs.watch(componentsFolder, () => {
+  console.log("Components changed, reloading...");
+  loadComponents();
+});
+
+const folderList = fs.readdirSync(staticFolder).filter((file) => fs.statSync(path.join(staticFolder, file)).isDirectory());
+
+for (const folder of folderList) {
+  fs.watch(path.join(staticFolder, folder), () => {
+    console.log("Static files changed, reloading...");
+    fileCache = {};
+  });
+}
