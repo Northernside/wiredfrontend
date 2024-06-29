@@ -1,10 +1,12 @@
 <script>
     token = getCookie("token");
+    previousBody = document.body.innerHTML;
+    document.body.innerHTML = "<div class='bg-[#101010] w-full h-screen'></div>";
 
     if (token) {
-        const user = parseJwt(token);
+        document.body.innerHTML = previousBody;
 
-        console.log(user);
+        const user = parseJwt(token);
 
         const discordPfp = document.getElementById("discord-profile-image");
         const discordUsername = document.getElementById("discord-username");

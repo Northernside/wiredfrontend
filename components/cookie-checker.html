@@ -1,4 +1,8 @@
 <script>
+    previousBody = document.body.innerHTML;
+    document.body.innerHTML = "<div class='bg-[#101010] w-full h-screen'></div>";
+
     token = getCookie("token");
     if (!token) window.location.href = "/login";
+    else document.body.innerHTML = previousBody;
 </script>
