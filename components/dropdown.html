@@ -1,0 +1,61 @@
+
+
+<script>
+    const dropdown = document.getElementById("dropdown");
+    const dropdownArrowUp = document.getElementById("dropdown-arrow-up");
+    const dropdownArrowDown = document.getElementById("dropdown-arrow-down");
+    const dropdownChoices = document.getElementById("dropdown-choices");
+    const dropdownChoiceAdmin = document.getElementById("dropdown-choice-admin");
+    const dropdownChoiceUser = document.getElementById("dropdown-choice-user");
+    const dropdownSelected = document.getElementById("dropdown-selected");
+
+    for (let entry of entries) {
+        let dropdownChoice = document.createElement("p");
+        dropdownChoice.classList.add("text-md", "font-medium", "select-none", "px-4", "flex", "flex-col", "border", "border-t-0", "border-[#303030]", "bg-[#202020]", "w-[200px]", "h-[20px]", "py-5", "cursor-pointer", "justify-center", "hover:bg-[#303030]", "transition-all", "duration-300");
+        dropdownChoice.innerText = entries[entries.indexOf(entry)];
+        dropdownChoice.id = `dropdown-choice-${entry.toLowerCase()}`;
+
+        const entryIndex = entries.indexOf(entry);
+        if (entryIndex === entries.length - 1) dropdownChoice.classList.add("rounded-b-lg");
+        else {
+            dropdownChoice.classList.add("border-t-0");
+            dropdownChoice.classList.add("border-b-0");
+        }
+
+        dropdownChoices.appendChild(dropdownChoice);
+    }
+
+    dropdown.addEventListener("click", () => {
+        if (dropdownChoices.classList.contains("hidden")) {
+            dropdownChoices.classList.remove("hidden");
+            dropdownArrowUp.classList.remove("hidden");
+            dropdownArrowDown.classList.add("hidden");
+
+            dropdown.classList.add("border-b-0");
+            dropdown.classList.add("rounded-b-none");
+        } else {
+            dropdownChoices.classList.add("hidden");
+            dropdownArrowUp.classList.add("hidden");
+            dropdownArrowDown.classList.remove("hidden");
+
+            dropdown.classList.remove("border-b-0");
+            dropdown.classList.remove("rounded-b-none");
+        }
+    });
+
+    for (let entry of entries) {
+        const choice = document.getElementById(`dropdown-choice-${entry.toLowerCase()}`);
+        choice.addEventListener("click", () => {
+            dropdownSelected.innerText = entry;
+
+            dropdownChoices.classList.add("hidden");
+            dropdownArrowUp.classList.add("hidden");
+            dropdownArrowDown.classList.remove("hidden");
+
+            dropdown.classList.remove("border-b-0");
+            dropdown.classList.remove("rounded-b-none");
+
+            selectedCallback(entry);
+        });
+    }
+</script>

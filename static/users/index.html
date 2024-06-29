@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Wired</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/style.css" rel="stylesheet">
+
+    <!--utils.html-->
+</head>
+
+<body class="bg-[#101010] text-white">
+    <!--cookie-checker.html-->
+    <div class="flex flex-row gap-2">
+        <!--navbar.html-->
+        <!--load-user-data.html-->
+
+        <div class="ml-4 mt-4 flex flex-col">
+            <p class="text-2xl font-bold mb-4">
+                User Management
+            </p>
+
+            <div id="users" class="flex flex-row gap-2 flex-wrap">
+                <p class="text-lg font-semibold" id="users-loading">Loading...</p>
+            </div>
+        </div>
+
+        <!--notifications.html-->
+
+        <script>
+            (async () => {
+                const usersResponse = await authFetch("https://master.wired.rip/api/users", {}).then(async (res) => await res.json());
+                const usersDiv = document.getElementById("users");
+
+                for (const user of usersResponse) {
+                    addUser(user);
+                }
+
+                document.getElementById("users-loading").remove();
+
+                function removeUser(userId) {
+                    const userDiv = document.getElementById(`user-${userId}`);
+                    userDiv.remove();
+                }
+
+                function addUser(user) {
+                    const userDiv = document.createElement("div");
+                    userDiv.classList.add("flex", "flex-col");
+                    userDiv.id = `user-${user.user_id}`;
+
+                    const userHeader = document.createElement("div");
+                    userHeader.classList.add("bg-[#151515]", "border", "border-[#2C2C2C]", "rounded-t-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[50px]", "flex", "flex-row", "items-center", "justify-between");
+
+                    const userName = document.createElement("p");
+                    userName.classList.add("text-md", "font-semibold", "flex", "flex-row", "items-center");
+                    userName.innerHTML = `<img src="https://cdn.discordapp.com/avatars/${user.discord_id}/${user.avatar}.png" class="rounded-full w-8 h-8 mr-2" /> ${user.username} <span class="text-neutral-400 text-xs ml-1">(${user.discord_id})</span>`;
+                    userHeader.appendChild(userName);
+
+                    userDiv.appendChild(userHeader);
+
+                    const userBody = document.createElement("div");
+                    userBody.classList.add("bg-[#151515]", "border", "border-t-0", "border-[#2C2C2C]", "rounded-b-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[60px]", "flex", "flex-row", "items-center");
+
+                    const userBodyLeft = document.createElement("div");
+                    userBodyLeft.classList.add("flex", "flex-row", "gap-2", "w-full");
+
+                    const userRole = document.createElement("div");
+                    userRole.classList.add("flex", "flex-col", "gap-2");
+
+                    const userRoleDropdown = document.createElement("div");
+                    userRoleDropdown.classList.add("flex", "flex-col", "fixed", "-mt-5");
+
+                    const userRoleDropdownHeader = document.createElement("div");
+                    userRoleDropdownHeader.classList.add("flex", "flex-row", "rounded-lg", "border", "border-[#303030]", "bg-[#202020]", "w-[200px]", "h-[20px]", "py-5", "justify-between", "items-center", "cursor-pointer");
+                    userRoleDropdownHeader.id = `dropdown-${user.discord_id}`;
+
+                    const userRoleDropdownSelected = document.createElement("p");
+                    userRoleDropdownSelected.classList.add("text-md", "font-medium", "select-none", "px-4");
+                    userRoleDropdownSelected.id = `dropdown-selected-${user.discord_id}`;
+                    userRoleDropdownSelected.innerText = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+                    userRoleDropdownHeader.appendChild(userRoleDropdownSelected);
+
+                    const userRoleDropdownArrow = document.createElement("div");
+                    userRoleDropdownArrow.classList.add("w-8", "h-6", "flex", "justify-center", "items-center");
+
+                    const userRoleDropdownArrowUp = document.createElement("svg");
+                    userRoleDropdownArrowUp.setAttribute("width", "8");
+                    userRoleDropdownArrowUp.setAttribute("height", "6");
+                    userRoleDropdownArrowUp.setAttribute("viewBox", "0 0 8 6");
+                    userRoleDropdownArrowUp.setAttribute("fill", "none");
+                    userRoleDropdownArrowUp.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+                    userRoleDropdownArrowUp.classList.add("hidden");
+                    userRoleDropdownArrowUp.id = `dropdown-arrow-up-${user.discord_id}`;
+
+                    const userRoleDropdownArrowUpPath = document.createElement("path");
+                    userRoleDropdownArrowUpPath.setAttribute("d", "M3.24407 0.872871C3.64284 0.412409 4.35716 0.41241 4.75593 0.872871L7.76318 4.34535C8.32406 4.99299 7.864 6 7.00725 6L0.992749 6C0.135997 6 -0.324056 4.99299 0.23682 4.34535L3.24407 0.872871Z");
+                    userRoleDropdownArrowUpPath.setAttribute("fill", "#7C7C7C");
+                    userRoleDropdownArrowUp.appendChild(userRoleDropdownArrowUpPath);
+
+                    const userRoleDropdownArrowDown = document.createElement("svg");
+                    userRoleDropdownArrowDown.setAttribute("width", "8");
+                    userRoleDropdownArrowDown.setAttribute("height", "6");
+                    userRoleDropdownArrowDown.setAttribute("viewBox", "0 0 8 6");
+                    userRoleDropdownArrowDown.setAttribute("fill", "none");
+                    userRoleDropdownArrowDown.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+                    userRoleDropdownArrowDown.classList.add("hidden");
+                    userRoleDropdownArrowDown.id = `dropdown-arrow-down-${user.discord_id}`;
+
+                    const userRoleDropdownArrowDownPath = document.createElement("path");
+                    userRoleDropdownArrowDownPath.setAttribute("d", "M4.75593 5.12713C4.35716 5.58759 3.64284 5.58759 3.24407 5.12713L0.236819 1.65465C-0.324057 1.00701 0.135996 9.13357e-08 0.992749 1.66235e-07L7.00725 6.9204e-07C7.864 7.6694e-07 8.32406 1.00701 7.76318 1.65465L4.75593 5.12713Z");
+                    userRoleDropdownArrowDownPath.setAttribute("fill", "#7C7C7C");
+                    userRoleDropdownArrowDown.appendChild(userRoleDropdownArrowDownPath);
+
+                    userRoleDropdownArrow.appendChild(userRoleDropdownArrowUp);
+                    userRoleDropdownArrow.appendChild(userRoleDropdownArrowDown);
+                    userRoleDropdownHeader.appendChild(userRoleDropdownArrow);
+
+                    userRoleDropdown.appendChild(userRoleDropdownHeader);
+
+                    const userRoleDropdownChoices = document.createElement("div");
+                    userRoleDropdownChoices.classList.add("hidden");
+                    userRoleDropdownChoices.id = `dropdown-choices-${user.discord_id}`;
+                    userRoleDropdown.appendChild(userRoleDropdownChoices);
+
+                    userRole.appendChild(userRoleDropdown);
+                    userRoleDropdownHeader.appendChild(userRoleDropdownArrow);
+                    userRoleDropdown.appendChild(userRoleDropdownChoices);
+
+                    userBodyLeft.appendChild(userRole);
+
+                    userBody.appendChild(userBodyLeft);
+
+                    userDiv.appendChild(userBody);
+
+                    usersDiv.appendChild(userDiv);
+                }
+
+
+                for (let user of usersResponse) {
+                    const dropdown = document.getElementById(`dropdown-${user.discord_id}`);
+                    const dropdownArrowUp = document.getElementById(`dropdown-arrow-up-${user.discord_id}`);
+                    const dropdownArrowDown = document.getElementById(`dropdown-arrow-down-${user.discord_id}`);
+                    const dropdownChoices = document.getElementById(`dropdown-choices-${user.discord_id}`);
+                    const dropdownSelected = document.getElementById(`dropdown-selected-${user.discord_id}`);
+
+                    const entries = ["Admin", "User"];
+
+                    for (let entry of entries) {
+                        let dropdownChoice = document.createElement("p");
+                        dropdownChoice.classList.add("text-md", "font-medium", "select-none", "px-4", "flex", "flex-col", "border", "border-t-0", "border-[#303030]", "bg-[#202020]", "w-[200px]", "h-[20px]", "py-5", "cursor-pointer", "justify-center", "hover:bg-[#303030]", "transition-all", "duration-300");
+                        dropdownChoice.innerText = entries[entries.indexOf(entry)];
+                        dropdownChoice.id = `dropdown-choice-${entry.toLowerCase()}-${user.discord_id}`;
+
+                        const entryIndex = entries.indexOf(entry);
+                        if (entryIndex === entries.length - 1) dropdownChoice.classList.add("rounded-b-lg");
+                        else {
+                            dropdownChoice.classList.add("border-t-0");
+                            dropdownChoice.classList.add("border-b-0");
+                        }
+
+                        if (dropdownChoices)
+                            dropdownChoices.appendChild(dropdownChoice);
+                    }
+
+                    if (dropdown)
+                        dropdown.addEventListener("click", () => {
+                            if (dropdownChoices.classList.contains("hidden")) {
+                                dropdownChoices.classList.remove("hidden");
+                                dropdownArrowUp.classList.remove("hidden");
+                                dropdownArrowDown.classList.add("hidden");
+
+                                dropdown.classList.add("border-b-0");
+                                dropdown.classList.add("rounded-b-none");
+                            } else {
+                                dropdownChoices.classList.add("hidden");
+                                dropdownArrowUp.classList.add("hidden");
+                                dropdownArrowDown.classList.remove("hidden");
+
+                                dropdown.classList.remove("border-b-0");
+                                dropdown.classList.remove("rounded-b-none");
+                            }
+                        });
+
+                    for (let entry of entries) {
+                        const choice = document.getElementById(`dropdown-choice-${entry.toLowerCase()}-${user.discord_id}`);
+                        if (!choice) continue;
+                        choice.addEventListener("click", async () => {
+                            dropdownSelected.innerText = entry;
+
+                            dropdownChoices.classList.add("hidden");
+                            dropdownArrowUp.classList.add("hidden");
+                            dropdownArrowDown.classList.remove("hidden");
+
+                            dropdown.classList.remove("border-b-0");
+                            dropdown.classList.remove("rounded-b-none");
+
+                            const req = await authFetch(`https://master.wired.rip/api/users/role?discord_id=${user.discord_id}&role=${entry.toLowerCase()}`, {});
+
+                            if (req.status === 200) {
+                                showNotification("Role changed successfully", 3);
+                            } else {
+                                showNotification("Failed to change role", 3);
+                            }
+                        });
+                    }
+                }
+            })();
+        </script>
+</body>
+
+</html>

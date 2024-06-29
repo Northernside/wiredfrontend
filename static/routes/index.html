@@ -26,193 +26,192 @@
                 <p class="text-lg font-semibold" id="routes-loading">Loading...</p>
             </div>
         </div>
-    </div>
 
-    <!--notifications.html-->
+        <!--notifications.html-->
 
-    <div class="bg-[#00000080] backdrop-blur-sm z-50 fixed top-0 left-0 w-full h-full flex justify-center items-center hidden"
-        id="create-route-modal">
-        <div
-            class="flex flex-col rounded-lg border border-[#303030] bg-[#202020] w-max-content h-max-content py-8 p-4 gap-4">
-            <p class="text-lg font-bold text-center">Create a new route</p>
-            <div class="flex flex-col gap-1 mx-4">
-                <p class="text-sm font-regular text-neutral-400">Proxy Host</p>
-                <input type="text"
-                    class="text-md font-medium bg-[#303030] border border-[#404040] rounded-lg px-2 py-1 w-[250px] outline-none"
-                    id="proxy-host">
-            </div>
-            <div class="flex flex-row gap-4 mx-4">
-                <div class="flex flex-col gap-1">
-                    <p class="text-sm font-regular text-neutral-400">Host</p>
+        <div class="bg-[#00000080] backdrop-blur-sm z-50 fixed top-0 left-0 w-full h-full flex justify-center items-center hidden"
+            id="create-route-modal">
+            <div
+                class="flex flex-col rounded-lg border border-[#303030] bg-[#202020] w-max-content h-max-content py-8 p-4 gap-4">
+                <p class="text-lg font-bold text-center">Create a new route</p>
+                <div class="flex flex-col gap-1 mx-4">
+                    <p class="text-sm font-regular text-neutral-400">Proxy Host</p>
                     <input type="text"
                         class="text-md font-medium bg-[#303030] border border-[#404040] rounded-lg px-2 py-1 w-[250px] outline-none"
-                        id="host">
+                        id="proxy-host">
                 </div>
-                <div class="flex flex-col gap-1">
-                    <p class="text-sm font-regular text-neutral-400">Port</p>
-                    <input type="text"
-                        class="text-md font-medium bg-[#303030] border border-[#404040] rounded-lg px-2 py-1 w-[70px] outline-none"
-                        value="25565" id="port">
+                <div class="flex flex-row gap-4 mx-4">
+                    <div class="flex flex-col gap-1">
+                        <p class="text-sm font-regular text-neutral-400">Host</p>
+                        <input type="text"
+                            class="text-md font-medium bg-[#303030] border border-[#404040] rounded-lg px-2 py-1 w-[250px] outline-none"
+                            id="host">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <p class="text-sm font-regular text-neutral-400">Port</p>
+                        <input type="text"
+                            class="text-md font-medium bg-[#303030] border border-[#404040] rounded-lg px-2 py-1 w-[70px] outline-none"
+                            value="25565" id="port">
+                    </div>
                 </div>
-            </div>
 
-            <div class="flex flex-row gap-4 mx-4 mt-4 justify-center">
-                <button
-                    class="w-full bg-[#303030] border border-[#404040] rounded-lg px-4 py-2 text-md font-medium hover:bg-[#404040] transition-all duration-300"
-                    id="create-route-button">Create</button>
-                <button
-                    class="w-full bg-[#303030] border border-[#404040] rounded-lg px-4 py-2 text-md font-medium hover:bg-[#404040] transition-all duration-300"
-                    id="cancel-create-route-button">Cancel</button>
+                <div class="flex flex-row gap-4 mx-4 mt-4 justify-center">
+                    <button
+                        class="w-full bg-[#303030] border border-[#404040] rounded-lg px-4 py-2 text-md font-medium hover:bg-[#404040] transition-all duration-300"
+                        id="create-route-button">Create</button>
+                    <button
+                        class="w-full bg-[#303030] border border-[#404040] rounded-lg px-4 py-2 text-md font-medium hover:bg-[#404040] transition-all duration-300"
+                        id="cancel-create-route-button">Cancel</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        (async () => {
-            const routesResponse = await authFetch("https://master.wired.rip/api/routes", {}).then(async (res) => await res.json());
-            const routesDiv = document.getElementById("routes");
+        <script>
+            (async () => {
+                const routesResponse = await authFetch("https://master.wired.rip/api/routes", {}).then(async (res) => await res.json());
+                const routesDiv = document.getElementById("routes");
 
-            for (const route of routesResponse.routes) {
-                addRoute(route);
-            }
+                for (const route of routesResponse.routes) {
+                    addRoute(route);
+                }
 
-            const createNewRouteDiv = document.createElement("div");
-            createNewRouteDiv.classList.add("border-2", "border-[#2C2C2C]", "border-dashed", "rounded-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[130px]", "flex", "flex-row", "items-center", "justify-center", "cursor-pointer");
-            createNewRouteDiv.id = "create-route";
-            createNewRouteDiv.innerHTML = "<p>Create new route</p>";
-            routesDiv.appendChild(createNewRouteDiv);
+                const createNewRouteDiv = document.createElement("div");
+                createNewRouteDiv.classList.add("border-2", "border-[#2C2C2C]", "border-dashed", "rounded-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[130px]", "flex", "flex-row", "items-center", "justify-center", "cursor-pointer");
+                createNewRouteDiv.id = "create-route";
+                createNewRouteDiv.innerHTML = "<p>Create new route</p>";
+                routesDiv.appendChild(createNewRouteDiv);
 
-            document.getElementById("routes-loading").remove();
+                document.getElementById("routes-loading").remove();
 
-            const createRouteButton = document.getElementById("create-route");
-            createRouteButton.addEventListener("click", async () => {
-                const modal = document.getElementById("create-route-modal");
-                modal.classList.remove("hidden");
-            });
+                const createRouteButton = document.getElementById("create-route");
+                createRouteButton.addEventListener("click", async () => {
+                    const modal = document.getElementById("create-route-modal");
+                    modal.classList.remove("hidden");
+                });
 
-            const saveRouteButton = document.getElementById("create-route-button");
-            saveRouteButton.addEventListener("click", async () => {
-                const serverHost = document.getElementById("host").value;
-                const serverPort = document.getElementById("port").value;
-                const proxyDomain = document.getElementById("proxy-host").value;
+                const saveRouteButton = document.getElementById("create-route-button");
+                saveRouteButton.addEventListener("click", async () => {
+                    const serverHost = document.getElementById("host").value;
+                    const serverPort = document.getElementById("port").value;
+                    const proxyDomain = document.getElementById("proxy-host").value;
 
-                const createRouteResponse = await authFetch(`https://master.wired.rip/api/routes/add?server_host=${serverHost}&server_port=${serverPort}&proxy_port=25565&proxy_domain=${proxyDomain}`, {});
+                    const createRouteResponse = await authFetch(`https://master.wired.rip/api/routes/add?server_host=${serverHost}&server_port=${serverPort}&proxy_port=25565&proxy_domain=${proxyDomain}`, {});
 
-                if (createRouteResponse.status === 200) {
-                    showNotification("Route created successfully!", 3);
+                    if (createRouteResponse.status === 200) {
+                        showNotification("Route created successfully!", 3);
 
-                    const route_id = (await createRouteResponse.json()).route_id;
-                    addRoute({
-                        route_id: route_id,
-                        server_host: serverHost,
-                        server_port: serverPort,
-                        proxy_domain: proxyDomain
-                    });
+                        const route_id = (await createRouteResponse.json()).route_id;
+                        addRoute({
+                            route_id: route_id,
+                            server_host: serverHost,
+                            server_port: serverPort,
+                            proxy_domain: proxyDomain
+                        });
 
+                        const modal = document.getElementById("create-route-modal");
+                        modal.classList.add("hidden");
+
+                        document.getElementById("host").value = "";
+                        document.getElementById("port").value = "25565";
+                        document.getElementById("proxy-host").value = "";
+
+                        // put create new route div at the end
+                        routesDiv.appendChild(createNewRouteDiv);
+
+                    } else {
+                        showNotification("Failed to create route!", 3);
+                    }
+                });
+
+                const cancelCreateRouteButton = document.getElementById("cancel-create-route-button");
+                cancelCreateRouteButton.addEventListener("click", () => {
                     const modal = document.getElementById("create-route-modal");
                     modal.classList.add("hidden");
+                });
 
-                    document.getElementById("host").value = "";
-                    document.getElementById("port").value = "25565";
-                    document.getElementById("proxy-host").value = "";
-
-                    // put create new route div at the end
-                    routesDiv.appendChild(createNewRouteDiv);
-                    
-                } else {
-                    showNotification("Failed to create route!", 3);
+                function removeRoute(routeId) {
+                    const routeDiv = document.getElementById(`route-${routeId}`);
+                    routeDiv.remove();
                 }
-            });
 
-            const cancelCreateRouteButton = document.getElementById("cancel-create-route-button");
-            cancelCreateRouteButton.addEventListener("click", () => {
-                const modal = document.getElementById("create-route-modal");
-                modal.classList.add("hidden");
-            });
+                function addRoute(route) {
+                    const routeDiv = document.createElement("div");
+                    routeDiv.classList.add("flex", "flex-col");
+                    routeDiv.id = `route-${route.route_id}`;
 
-            function removeRoute(routeId) {
-                const routeDiv = document.getElementById(`route-${routeId}`);
-                routeDiv.remove();
-            }
+                    const routeHeader = document.createElement("div");
+                    routeHeader.classList.add("bg-[#151515]", "border", "border-[#2C2C2C]", "rounded-t-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[50px]", "flex", "flex-row", "items-center", "justify-between");
 
-            function addRoute(route) {
-                const routeDiv = document.createElement("div");
-                routeDiv.classList.add("flex", "flex-col");
-                routeDiv.id = `route-${route.route_id}`;
+                    const routeName = document.createElement("p");
+                    routeName.classList.add("text-md", "font-semibold");
+                    routeName.innerText = route.proxy_domain;
+                    routeHeader.appendChild(routeName);
 
-                const routeHeader = document.createElement("div");
-                routeHeader.classList.add("bg-[#151515]", "border", "border-[#2C2C2C]", "rounded-t-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[50px]", "flex", "flex-row", "items-center", "justify-between");
+                    const trashbin = document.createElement("button");
+                    trashbin.classList.add("hover:bg-[#202020]", "rounded-lg", "p-2", "group", "transition-all", "duration-300");
 
-                const routeName = document.createElement("p");
-                routeName.classList.add("text-md", "font-semibold");
-                routeName.innerText = route.proxy_domain;
-                routeHeader.appendChild(routeName);
-
-                const trashbin = document.createElement("button");
-                trashbin.classList.add("hover:bg-[#202020]", "rounded-lg", "p-2", "group", "transition-all", "duration-300");
-
-                const trashbinSvg = `
+                    const trashbinSvg = `
                 <svg class="h-6 w-6 group-hover:fill-red-500 fill-neutral-500 transition-all duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path></svg>
                 `;
 
-                trashbin.innerHTML = trashbinSvg;
-                routeHeader.appendChild(trashbin);
+                    trashbin.innerHTML = trashbinSvg;
+                    routeHeader.appendChild(trashbin);
 
-                routeDiv.appendChild(routeHeader);
+                    routeDiv.appendChild(routeHeader);
 
-                const routeBody = document.createElement("div");
-                routeBody.classList.add("bg-[#151515]", "border", "border-t-0", "border-[#2C2C2C]", "rounded-b-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[80px]", "flex", "flex-row", "items-center");
+                    const routeBody = document.createElement("div");
+                    routeBody.classList.add("bg-[#151515]", "border", "border-t-0", "border-[#2C2C2C]", "rounded-b-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[80px]", "flex", "flex-row", "items-center");
 
-                const routeBodyLeft = document.createElement("div");
-                routeBodyLeft.classList.add("flex", "flex-row", "gap-2", "w-full");
+                    const routeBodyLeft = document.createElement("div");
+                    routeBodyLeft.classList.add("flex", "flex-row", "gap-2", "w-full");
 
-                const routeBodyLeftHost = document.createElement("div");
-                routeBodyLeftHost.classList.add("w-full");
+                    const routeBodyLeftHost = document.createElement("div");
+                    routeBodyLeftHost.classList.add("w-full");
 
-                const routeBodyLeftHostLabel = document.createElement("p");
-                routeBodyLeftHostLabel.classList.add("text-sm", "font-regular", "text-neutral-400");
-                routeBodyLeftHostLabel.innerText = "Host";
-                routeBodyLeftHost.appendChild(routeBodyLeftHostLabel);
+                    const routeBodyLeftHostLabel = document.createElement("p");
+                    routeBodyLeftHostLabel.classList.add("text-sm", "font-regular", "text-neutral-400");
+                    routeBodyLeftHostLabel.innerText = "Host";
+                    routeBodyLeftHost.appendChild(routeBodyLeftHostLabel);
 
-                const routeBodyLeftHostValue = document.createElement("p");
-                routeBodyLeftHostValue.classList.add("text-md", "font-medium", "bg-[#202020]", "border", "border-[#303030]", "rounded-lg", "px-2", "py-1", "w-full");
-                routeBodyLeftHostValue.innerText = route.server_host;
-                routeBodyLeftHost.appendChild(routeBodyLeftHostValue);
+                    const routeBodyLeftHostValue = document.createElement("p");
+                    routeBodyLeftHostValue.classList.add("text-md", "font-medium", "bg-[#202020]", "border", "border-[#303030]", "rounded-lg", "px-2", "py-1", "w-full");
+                    routeBodyLeftHostValue.innerText = route.server_host;
+                    routeBodyLeftHost.appendChild(routeBodyLeftHostValue);
 
-                routeBodyLeft.appendChild(routeBodyLeftHost);
+                    routeBodyLeft.appendChild(routeBodyLeftHost);
 
-                const routeBodyLeftPort = document.createElement("div");
-                routeBodyLeftPort.classList.add("w-max");
+                    const routeBodyLeftPort = document.createElement("div");
+                    routeBodyLeftPort.classList.add("w-max");
 
-                const routeBodyLeftPortLabel = document.createElement("p");
-                routeBodyLeftPortLabel.classList.add("text-sm", "font-regular", "text-neutral-400");
-                routeBodyLeftPortLabel.innerText = "Port";
-                routeBodyLeftPort.appendChild(routeBodyLeftPortLabel);
+                    const routeBodyLeftPortLabel = document.createElement("p");
+                    routeBodyLeftPortLabel.classList.add("text-sm", "font-regular", "text-neutral-400");
+                    routeBodyLeftPortLabel.innerText = "Port";
+                    routeBodyLeftPort.appendChild(routeBodyLeftPortLabel);
 
-                const routeBodyLeftPortValue = document.createElement("p");
-                routeBodyLeftPortValue.classList.add("text-md", "font-medium", "bg-[#202020]", "border", "border-[#303030]", "rounded-lg", "px-2", "py-1");
-                routeBodyLeftPortValue.innerText = route.server_port;
-                routeBodyLeftPort.appendChild(routeBodyLeftPortValue);
+                    const routeBodyLeftPortValue = document.createElement("p");
+                    routeBodyLeftPortValue.classList.add("text-md", "font-medium", "bg-[#202020]", "border", "border-[#303030]", "rounded-lg", "px-2", "py-1");
+                    routeBodyLeftPortValue.innerText = route.server_port;
+                    routeBodyLeftPort.appendChild(routeBodyLeftPortValue);
 
-                routeBodyLeft.appendChild(routeBodyLeftPort);
-                routeBody.appendChild(routeBodyLeft);
+                    routeBodyLeft.appendChild(routeBodyLeftPort);
+                    routeBody.appendChild(routeBodyLeft);
 
-                routeDiv.appendChild(routeBody);
-                routesDiv.appendChild(routeDiv);
+                    routeDiv.appendChild(routeBody);
+                    routesDiv.appendChild(routeDiv);
 
-                trashbin.addEventListener("click", async () => {
-                    const deleteRouteResponse = await authFetch(`https://master.wired.rip/api/routes/remove?route_id=${route.route_id}`, { method: "DELETE" });
+                    trashbin.addEventListener("click", async () => {
+                        const deleteRouteResponse = await authFetch(`https://master.wired.rip/api/routes/remove?route_id=${route.route_id}`, { method: "DELETE" });
 
-                    if (deleteRouteResponse.status === 200) {
-                        showNotification("Route deleted successfully!", 3);
-                        removeRoute(route.route_id);
-                    } else {
-                        showNotification("Failed to delete route!", 3);
-                    }
-                });
-            }
-        })();
-    </script>
+                        if (deleteRouteResponse.status === 200) {
+                            showNotification("Route deleted successfully!", 3);
+                            removeRoute(route.route_id);
+                        } else {
+                            showNotification("Failed to delete route!", 3);
+                        }
+                    });
+                }
+            })();
+        </script>
 </body>
 
 </html>
