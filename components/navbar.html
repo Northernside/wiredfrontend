@@ -13,22 +13,26 @@
             </a>
         </div>
     </div>
-    <div class="flex items-center justify-center">
+    <div class="flex flex-col items-center justify-center gap-2">
         <div
             class="text-white w-full ml-2 px-4 py-2 cursor-pointer border border-[#ffffff30] rounded-lg transition-all duration-300 bg-[#ffffff05] hover:bg-[#ffffff10]" id="path-routes">
             <a href="/routes">
                 <p class="text-lg font-semibold">Routes</p>
             </a>
         </div>
+        <div
+            class="text-white w-full ml-2 px-4 py-2 cursor-pointer border border-[#ffffff30] rounded-lg transition-all duration-300 bg-[#ffffff05] hover:bg-[#ffffff10]" id="path-nodes">
+            <a href="/nodes">
+                <p class="text-lg font-semibold">Nodes</p>
+            </a>
+        </div>
     </div>
 
     <script>
         const url = new URL(window.location.href).pathname;
-
         const navbarEntry = document.getElementById(`path-${url.split("/")[1]}`);
 
         if (!navbarEntry) {
-            document.getElementById("path-routes").classList.remove("bg-[#ffffff05]");
             document.getElementById("navbar-profile").classList.add("bg-[#ffffff10]");
         } else {
             navbarEntry.classList.add("bg-[#ffffff10]");

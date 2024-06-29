@@ -7,14 +7,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/style.css" rel="stylesheet">
-    
+
     <!--utils.html-->
 </head>
 
 <body class="bg-[#101010]">
     <!--cookie-checker.html-->
-    <!--navbar.html-->
-    <!--load-user-data.html-->
+    <div class="flex flex-row gap-2">
+        <!--navbar.html-->
+        <!--load-user-data.html-->
+
+        <div class="ml-4 mt-4 flex flex-col">
+            <div class="w-max-content px-3 h-[30px] bg-[#f0f0f0] rounded-lg flex justify-center items-center cursor-pointer"
+                id="update">
+                <p class="text-[#101010]">Force Binary Update</p>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById("update").addEventListener("click", async () => {
+                const response = await authFetch("https://master.wired.rip/api/node/update", {}).then(async (res) => await res.json());
+
+                if (response.success) {
+                    alert("Binary update has been forced.");
+                } else {
+                    alert("Failed to force binary update.");
+                }
+            });
+        </script>
+    </div>
 </body>
 
 </html>

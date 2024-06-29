@@ -88,8 +88,7 @@
                 routesDiv.appendChild(routeDiv);
             }
 
-            const routesLoading = document.getElementById("routes-loading");
-            routesLoading.remove();
+            document.getElementById("routes-loading").remove();
 
             const createRouteButton = document.getElementById("create-route");
             createRouteButton.addEventListener("click", async () => {

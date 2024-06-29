@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Wired</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/style.css" rel="stylesheet">
+
+    <!--utils.html-->
+</head>
+
+<body class="bg-[#101010] text-white">
+    <!--cookie-checker.html-->
+    <div class="flex flex-row gap-2">
+        <!--navbar.html-->
+        <!--load-user-data.html-->
+
+        <div class="ml-4 mt-4 flex flex-col">
+            <p class="text-2xl font-bold mb-4">
+                Nodes Management
+            </p>
+
+            <div id="nodes" class="flex flex-col gap-2">
+                <p class="text-lg font-semibold" id="nodes-loading">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (async () => {
+            const nodesResponse = await authFetch("https://master.wired.rip/api/nodes", {}).then(async (res) => await res.json());
+            const nodesDiv = document.getElementById("nodes");
+
+            for (const route of nodesResponse) {
+                const nodeDiv = document.createElement("div");
+                nodeDiv.id = `wired-route-${route.key}`;
+                nodeDiv.className = "flex flex-row gap-2 bg-[#202020] p-2 rounded-lg";
+
+                const nodeName = document.createElement("p");
+                nodeName.className = "text-lg font-bold";
+                nodeName.innerText = route.key;
+
+                const nodeArrow = document.createElement("p");
+                nodeArrow.className = "text-lg select-none";
+                nodeArrow.innerText = "»";
+
+                const nodeAddress = document.createElement("p");
+                nodeAddress.className = "text-lg font-semibold text-neutral-300";
+                nodeAddress.innerText = route.address;
+                
+                nodeDiv.appendChild(nodeName);
+                nodeDiv.appendChild(nodeArrow);
+                nodeDiv.appendChild(nodeAddress);
+
+                nodesDiv.appendChild(nodeDiv);
+            }
+
+            document.getElementById("nodes-loading").remove();
+        })();
+    </script>
+</body>
+
+</html>
