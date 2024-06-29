@@ -24,14 +24,16 @@
             </div>
         </div>
 
+        <!--notifications.html-->
+
         <script>
             document.getElementById("update").addEventListener("click", async () => {
-                const response = await authFetch("https://master.wired.rip/api/node/update", {}).then(async (res) => await res.json());
+                const request = await authFetch("https://master.wired.rip/api/node/update", {});
 
-                if (response.success) {
-                    alert("Binary update has been forced.");
+                if (request.status === 200) {
+                    showNotification("Binary update has been forced.", 3);
                 } else {
-                    alert("Failed to force binary update.");
+                    showNotification("Failed to force binary update.", 3);
                 }
             });
         </script>

@@ -28,14 +28,117 @@
         </div>
     </div>
 
+    <!--notifications.html-->
+
+    <div class="bg-[#00000080] backdrop-blur-sm z-50 fixed top-0 left-0 w-full h-full flex justify-center items-center hidden"
+        id="create-route-modal">
+        <div
+            class="flex flex-col rounded-lg border border-[#303030] bg-[#202020] w-max-content h-max-content py-8 p-4 gap-4">
+            <p class="text-lg font-bold text-center">Create a new route</p>
+            <div class="flex flex-col gap-1 mx-4">
+                <p class="text-sm font-regular text-neutral-400">Proxy Host</p>
+                <input type="text"
+                    class="text-md font-medium bg-[#303030] border border-[#404040] rounded-lg px-2 py-1 w-[250px] outline-none"
+                    id="proxy-host">
+            </div>
+            <div class="flex flex-row gap-4 mx-4">
+                <div class="flex flex-col gap-1">
+                    <p class="text-sm font-regular text-neutral-400">Host</p>
+                    <input type="text"
+                        class="text-md font-medium bg-[#303030] border border-[#404040] rounded-lg px-2 py-1 w-[250px] outline-none"
+                        id="host">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <p class="text-sm font-regular text-neutral-400">Port</p>
+                    <input type="text"
+                        class="text-md font-medium bg-[#303030] border border-[#404040] rounded-lg px-2 py-1 w-[70px] outline-none"
+                        value="25565" id="port">
+                </div>
+            </div>
+
+            <div class="flex flex-row gap-4 mx-4 mt-4 justify-center">
+                <button
+                    class="w-full bg-[#303030] border border-[#404040] rounded-lg px-4 py-2 text-md font-medium hover:bg-[#404040] transition-all duration-300"
+                    id="create-route-button">Create</button>
+                <button
+                    class="w-full bg-[#303030] border border-[#404040] rounded-lg px-4 py-2 text-md font-medium hover:bg-[#404040] transition-all duration-300"
+                    id="cancel-create-route-button">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         (async () => {
             const routesResponse = await authFetch("https://master.wired.rip/api/routes", {}).then(async (res) => await res.json());
             const routesDiv = document.getElementById("routes");
 
             for (const route of routesResponse.routes) {
+                addRoute(route);
+            }
+
+            const createNewRouteDiv = document.createElement("div");
+            createNewRouteDiv.classList.add("border-2", "border-[#2C2C2C]", "border-dashed", "rounded-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[130px]", "flex", "flex-row", "items-center", "justify-center", "cursor-pointer");
+            createNewRouteDiv.id = "create-route";
+            createNewRouteDiv.innerHTML = "<p>Create new route</p>";
+            routesDiv.appendChild(createNewRouteDiv);
+
+            document.getElementById("routes-loading").remove();
+
+            const createRouteButton = document.getElementById("create-route");
+            createRouteButton.addEventListener("click", async () => {
+                const modal = document.getElementById("create-route-modal");
+                modal.classList.remove("hidden");
+            });
+
+            const saveRouteButton = document.getElementById("create-route-button");
+            saveRouteButton.addEventListener("click", async () => {
+                const serverHost = document.getElementById("host").value;
+                const serverPort = document.getElementById("port").value;
+                const proxyDomain = document.getElementById("proxy-host").value;
+
+                const createRouteResponse = await authFetch(`https://master.wired.rip/api/routes/add?server_host=${serverHost}&server_port=${serverPort}&proxy_port=25565&proxy_domain=${proxyDomain}`, {});
+
+                if (createRouteResponse.status === 200) {
+                    showNotification("Route created successfully!", 3);
+
+                    const route_id = (await createRouteResponse.json()).route_id;
+                    addRoute({
+                        route_id: route_id,
+                        server_host: serverHost,
+                        server_port: serverPort,
+                        proxy_domain: proxyDomain
+                    });
+
+                    const modal = document.getElementById("create-route-modal");
+                    modal.classList.add("hidden");
+
+                    document.getElementById("host").value = "";
+                    document.getElementById("port").value = "25565";
+                    document.getElementById("proxy-host").value = "";
+
+                    // put create new route div at the end
+                    routesDiv.appendChild(createNewRouteDiv);
+                    
+                } else {
+                    showNotification("Failed to create route!", 3);
+                }
+            });
+
+            const cancelCreateRouteButton = document.getElementById("cancel-create-route-button");
+            cancelCreateRouteButton.addEventListener("click", () => {
+                const modal = document.getElementById("create-route-modal");
+                modal.classList.add("hidden");
+            });
+
+            function removeRoute(routeId) {
+                const routeDiv = document.getElementById(`route-${routeId}`);
+                routeDiv.remove();
+            }
+
+            function addRoute(route) {
                 const routeDiv = document.createElement("div");
                 routeDiv.classList.add("flex", "flex-col");
+                routeDiv.id = `route-${route.route_id}`;
 
                 const routeHeader = document.createElement("div");
                 routeHeader.classList.add("bg-[#151515]", "border", "border-[#2C2C2C]", "rounded-t-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[50px]", "flex", "flex-row", "items-center", "justify-between");
@@ -95,45 +198,19 @@
                 routeBody.appendChild(routeBodyLeft);
 
                 routeDiv.appendChild(routeBody);
-
                 routesDiv.appendChild(routeDiv);
 
                 trashbin.addEventListener("click", async () => {
                     const deleteRouteResponse = await authFetch(`https://master.wired.rip/api/routes/remove?route_id=${route.route_id}`, { method: "DELETE" });
 
                     if (deleteRouteResponse.status === 200) {
-                        alert("Route deleted successfully!");
-                        location.reload();
+                        showNotification("Route deleted successfully!", 3);
+                        removeRoute(route.route_id);
                     } else {
-                        alert("Failed to delete route!");
+                        showNotification("Failed to delete route!", 3);
                     }
                 });
             }
-
-            const createNewRouteDiv = document.createElement("div");
-            createNewRouteDiv.classList.add("border-2", "border-[#2C2C2C]", "border-dashed", "rounded-lg", "p-2", "flex", "flex-row", "gap-2", "w-[350px]", "h-[130px]", "flex", "flex-row", "items-center", "justify-center", "cursor-pointer");
-            createNewRouteDiv.id = "create-route";
-            createNewRouteDiv.innerHTML = "<p>Create new route</p>";
-            routesDiv.appendChild(createNewRouteDiv);
-
-            document.getElementById("routes-loading").remove();
-
-            const createRouteButton = document.getElementById("create-route");
-            createRouteButton.addEventListener("click", async () => {
-                const serverHost = prompt("Server Host");
-                const serverPort = prompt("Server Port");
-                const proxyPort = 25565;
-                const proxyDomain = prompt("Proxy Domain");
-
-                const createRouteResponse = await authFetch(`https://master.wired.rip/api/routes/add?server_host=${serverHost}&server_port=${serverPort}&proxy_port=${proxyPort}&proxy_domain=${proxyDomain}`, {});
-
-                if (createRouteResponse.status === 200) {
-                    alert("Route created successfully!");
-                    location.reload();
-                } else {
-                    alert("Failed to create route!");
-                }
-            });
         })();
     </script>
 </body>

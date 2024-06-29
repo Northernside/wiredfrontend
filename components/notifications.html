@@ -1,0 +1,18 @@
+<div class="flex justify-center items-center mt-4 fixed p-2 bg-[#00000080] backdrop-blur-sm border border-[#ffffff40] rounded-lg z-[100] top-4 right-1/2 transform translate-x-1/2 hidden"
+    id="notification">
+    <p class="text-md font-medium text-white" id="notification-text"></p>
+</div>
+
+<script>
+    function showNotification(message, timeout = 1000 * 3, callback = function () { }) {
+        document.getElementById("notification-text").innerText = message;
+        document.getElementById("notification").classList.remove("hidden");
+
+        setTimeout(() => {
+            document.getElementById("notification").classList.add("hidden");
+            document.getElementById("notification-text").innerText = "";
+
+            callback();
+        }, 1000 * timeout);
+    }
+</script>
