@@ -20,9 +20,15 @@ router.get("/auth", async ({ query, set }) => {
   }),
 });
 
+let demoBlacklisted = ["/users/index.html"];
+
 router.get("*", async ({ request }) => {
   let url = new URL(request.url).pathname;
   if (!/\.\w+$/.test(url)) url = path.join(url, "index.html");
+
+  if (demoBlacklisted.includes(url)) {
+    return new Response("This route is blacklisted in the demo.", { status: 403 });
+  }
 
   const filePath = path.join(staticFolder, url);
   if (!fs.existsSync(filePath))

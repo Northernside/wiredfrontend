@@ -11,16 +11,59 @@
     <!--utils.html-->
 </head>
 
-<body class="bg-[#101010]">
+<body class="bg-[#101010] text-white">
     <!--cookie-checker.html-->
-    <div class="flex flex-row gap-2">
+    <div class="flex flex-row gap-2 min-h-screen w-full relative">
         <!--navbar.html-->
         <!--load-user-data.html-->
 
-        <div class="ml-4 mt-4 flex flex-col">
-            <div class="w-max-content px-3 h-[30px] bg-[#f0f0f0] rounded-lg flex justify-center items-center cursor-pointer"
-                id="update">
-                <p class="text-[#101010]">Force Binary Update</p>
+        <div class="overflow-y-scroll h-screen w-full">
+            <div class="mx-4 mt-4 flex flex-col w-full max-w-full relative">
+                <div class="text-2xl font-bold mb-4 justify-between flex flex-row">
+                    <p>wired.rip</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:hidden cursor-pointer mr-8" fill="none"
+                        id="open-navbar" viewBox="0 0 24 24" stroke="currentColor" id="open-navbar">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </div>
+
+                <div id="settings" class="flex lg:flex-row flex-col gap-2 flex-wrap mr-8">
+                    <div class="w-max-content px-3 h-[30px] bg-[#f0f0f0] rounded-lg flex justify-center items-center cursor-pointer"
+                        id="update" require-role="admin">
+                        <p class="text-[#101010]">Force Binary Update</p>
+                    </div>
+
+                    <div class="w-max-content px-3 h-[30px] bg-[#f0f0f0] rounded-lg flex justify-center items-center cursor-pointer mt-2"
+                        id="upload" require-role="admin">
+                        <p class="text-[#101010]">Upload Binary</p>
+
+                        <input type="file" id="file" class="hidden" />
+
+                        <script>
+                            document.getElementById("upload").addEventListener("click", () => {
+                                document.getElementById("file").click();
+                            });
+
+                            document.getElementById("file").addEventListener("change", async () => {
+                                const file = document.getElementById("file").files[0];
+                                const formData = new FormData();
+                                formData.append("file", file);
+
+                                const request = await authFetch("https://master.wired.rip/api/node/update-binary", {
+                                    method: "POST",
+                                    body: formData
+                                });
+
+                                if (request.status === 200) {
+                                    showNotification("Binary has been uploaded.", 3);
+                                } else {
+                                    showNotification("Failed to upload binary.", 3);
+                                }
+                            });
+                        </script>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -38,6 +81,8 @@
             });
         </script>
     </div>
+
+    <!--permissions-check.html-->
 </body>
 
 </html>

@@ -1,0 +1,10 @@
+<script>
+    // go through all elements with the attribute "require-role"
+    document.querySelectorAll("[require-role]").forEach((element) => {
+        // check if the user has the required role
+        if (user.role !== element.getAttribute("require-role")) {
+            // if not, hide the element
+            element.style.display = "none";
+        }
+    });
+</script>

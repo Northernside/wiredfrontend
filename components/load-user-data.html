@@ -1,7 +1,7 @@
 <script>
     token = getCookie("token");
     if (token) {
-        const user = parseJwt(token);
+        user = parseJwt(token);
 
         const discordPfp = document.getElementById("discord-profile-image");
         const discordUsername = document.getElementById("discord-username");
