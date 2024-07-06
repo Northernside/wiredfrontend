@@ -26,7 +26,7 @@ router.get("*", async ({ request }) => {
   let url = new URL(request.url).pathname;
   if (!/\.\w+$/.test(url)) url = path.join(url, "index.html");
 
-  if (demoBlacklisted.includes(url)) {
+  if (Bun.env.MODE === "demo" && demoBlacklisted.includes(url)) {
     return new Response("This route is blacklisted in the demo.", { status: 403 });
   }
 
