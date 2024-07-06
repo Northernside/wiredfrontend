@@ -213,7 +213,15 @@
                             showNotification("Route deleted successfully!", 3);
                             removeRoute(route.route_id);
                         } else {
-                            showNotification("Failed to delete route!", 3);
+                            if (deleteRouteResponse.status === 403) {
+                                if (user.role === "demo") {
+                                    showNotification("You are not allowed to delete routes in demo mode!", 3);
+                                } else {
+                                    showNotification("You are not allowed to delete routes!", 3);
+                                }
+                            } else {
+                                showNotification("Failed to delete route!", 3);
+                            }
                         }
                     });
                 }
