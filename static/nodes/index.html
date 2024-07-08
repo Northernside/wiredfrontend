@@ -40,7 +40,7 @@
             const nodesResponse = await authFetch("https://master.wired.rip/api/nodes", {}).then(async (res) => await res.json());
             const nodesDiv = document.getElementById("nodes");
 
-            for (const route of nodesResponse) {
+            for (const route of (nodesResponse.online ?? [])) {
                 const nodeDiv = document.createElement("div");
                 nodeDiv.id = `wired-route-${route.key}`;
                 nodeDiv.className = "flex flex-row gap-2 bg-[#202020] p-2 rounded-lg";
@@ -56,7 +56,7 @@
                 const nodeAddress = document.createElement("p");
                 nodeAddress.className = "text-lg font-semibold text-neutral-300";
                 nodeAddress.innerText = route.address;
-                
+
                 nodeDiv.appendChild(nodeName);
                 nodeDiv.appendChild(nodeArrow);
                 nodeDiv.appendChild(nodeAddress);
