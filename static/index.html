@@ -36,7 +36,7 @@
 
                     <div class="w-max-content px-3 h-[30px] bg-[#f0f0f0] rounded-lg flex justify-center items-center cursor-pointer mt-2"
                         id="upload-arm64" require-role="admin">
-                        <p class="text-[#101010]">Upload Binary (amd64)</p>
+                        <p class="text-[#101010]">Upload Binary (arm64)</p>
 
                         <input type="file" id="file-arm64" class="hidden" />
 
@@ -46,7 +46,7 @@
                             });
 
                             document.getElementById("file-arm64").addEventListener("change", async () => {
-                                const file = document.getElementById("file").files[0];
+                                const file = document.getElementById("file-arm64").files[0];
                                 const formData = new FormData();
                                 formData.append("file", file);
 
