@@ -35,22 +35,52 @@
                     </div>
 
                     <div class="w-max-content px-3 h-[30px] bg-[#f0f0f0] rounded-lg flex justify-center items-center cursor-pointer mt-2"
-                        id="upload" require-role="admin">
-                        <p class="text-[#101010]">Upload Binary</p>
+                        id="upload-arm64" require-role="admin">
+                        <p class="text-[#101010]">Upload Binary (amd64)</p>
 
-                        <input type="file" id="file" class="hidden" />
+                        <input type="file" id="file-arm64" class="hidden" />
 
                         <script>
-                            document.getElementById("upload").addEventListener("click", () => {
-                                document.getElementById("file").click();
+                            document.getElementById("upload-arm64").addEventListener("click", () => {
+                                document.getElementById("file-arm64").click();
                             });
 
-                            document.getElementById("file").addEventListener("change", async () => {
+                            document.getElementById("file-arm64").addEventListener("change", async () => {
                                 const file = document.getElementById("file").files[0];
                                 const formData = new FormData();
                                 formData.append("file", file);
 
-                                const request = await authFetch("https://master.wired.rip/api/node/update-binary", {
+                                const request = await authFetch("https://master.wired.rip/api/node/update-binary?arch=arm64", {
+                                    method: "POST",
+                                    body: formData
+                                });
+
+                                if (request.status === 200) {
+                                    showNotification("Binary has been uploaded.", 3);
+                                } else {
+                                    showNotification("Failed to upload binary.", 3);
+                                }
+                            });
+                        </script>
+                    </div>
+
+                    <div class="w-max-content px-3 h-[30px] bg-[#f0f0f0] rounded-lg flex justify-center items-center cursor-pointer mt-2"
+                        id="upload-amd64" require-role="admin">
+                        <p class="text-[#101010]">Upload Binary (amd64)</p>
+
+                        <input type="file" id="file-amd64" class="hidden" />
+
+                        <script>
+                            document.getElementById("upload-amd64").addEventListener("click", () => {
+                                document.getElementById("file-amd64").click();
+                            });
+
+                            document.getElementById("file-amd64").addEventListener("change", async () => {
+                                const file = document.getElementById("file-amd64").files[0];
+                                const formData = new FormData();
+                                formData.append("file", file);
+
+                                const request = await authFetch("https://master.wired.rip/api/node/update-binary?arch=amd64", {
                                     method: "POST",
                                     body: formData
                                 });
